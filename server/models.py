@@ -61,7 +61,7 @@ class RestaurantPizza(db.Model, SerializerMixin):
 
     #Foreign Keys
     restaurant_id = db.Column(db.Integer, db.ForeignKey("restaurants.id"), nullable=False)
-    pizza_id = db.Column(db.Integer, db.ForeignKey("pizzas.od"), nullable=False)
+    pizza_id = db.Column(db.Integer, db.ForeignKey("pizzas.id"), nullable=False)
     # add relationships
     restaurant = relationship("Restaurant", back_populates="restaurant_pizzas")
     pizza = relationship("Pizza", back_populates="restaurant_pizzas")
@@ -70,10 +70,10 @@ class RestaurantPizza(db.Model, SerializerMixin):
     # add validation
     @validates("price")
     def validate_price(self, key, value):
-        if value <= 1:
-            raise ValueError("Price must be greater than 1$")
+        if value < 1:
+            raise ValueError("Price must be greater than or equal to 1$")
         elif value > 30:
-            raise ValueError("Price can't be greater than 30$")
+            raise ValueError("Price can't be greater than 30")
         return value
 
     def __repr__(self):
